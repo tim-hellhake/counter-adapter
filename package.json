@@ -1,0 +1,41 @@
+{
+  "name": "counter-adapter",
+  "display_name": "Counter",
+  "version": "0.1.0",
+  "description": "It count things",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc -p ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tim-hellhake/counter-adapter.git"
+  },
+  "author": "Tim Hellhake",
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/tim-hellhake/counter-adapter/issues"
+  },
+  "homepage": "https://github.com/tim-hellhake/counter-adapter#readme",
+  "files": [
+    "LICENSE",
+    "SHA256SUMS",
+    "lib/index.js",
+    "lib/counter-adapter.js"
+  ],
+  "moziot": {
+    "api": {
+      "min": 2,
+      "max": 2
+    },
+    "plugin": true,
+    "exec": "{nodeLoader} {path}"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^3.5.3",
+    "@types/node": "^12.7.1"
+  }
+}
