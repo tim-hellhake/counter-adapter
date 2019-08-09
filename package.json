@@ -1,7 +1,7 @@
 {
   "name": "counter-adapter",
   "display_name": "Counter",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Let's you count things by calling the increment action",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
