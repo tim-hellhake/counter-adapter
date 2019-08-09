@@ -9,8 +9,8 @@ import { Adapter, Device, Property } from 'gateway-addon';
 class CounterDevice extends Device {
     private callbacks: { [name: string]: () => void } = {};
 
-    constructor(adapter: any, name: string) {
-        super(adapter, `counter-${name}`);
+    constructor(adapter: any, id: string, name: string) {
+        super(adapter, id);
         this['@context'] = 'https://iot.mozilla.org/schemas/';
         this.name = name;
         let count: number = 0;
@@ -74,8 +74,9 @@ export class CounterAdapter extends Adapter {
         } = manifest.moziot.config;
 
         if (timers) {
-            for (const timer of timers) {
-                const counter = new CounterDevice(this, timer.name);
+            for (let index = 0; index < timers.length; index++) {
+                const timer = timers[index];
+                const counter = new CounterDevice(this, `counter-${index}`, timer.name);
                 this.handleDeviceAdded(counter);
             }
         }
