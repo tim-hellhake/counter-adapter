@@ -31,7 +31,29 @@
       "max": 2
     },
     "plugin": true,
-    "exec": "{nodeLoader} {path}"
+    "exec": "{nodeLoader} {path}",
+    "schema": {
+      "type": "object",
+      "properties": {
+        "timers": {
+          "type": "array",
+          "title": "A list of timers",
+          "items": {
+            "type": "object",
+            "title": "A timer",
+            "required": [
+              "name"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "title": "The name of the timer"
+              }
+            }
+          }
+        }
+      }
+    }
   },
   "dependencies": {},
   "devDependencies": {

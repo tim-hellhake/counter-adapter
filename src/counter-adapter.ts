@@ -9,15 +9,15 @@ import { Adapter, Device, Property } from 'gateway-addon';
 class CounterDevice extends Device {
     private callbacks: { [name: string]: () => void } = {};
 
-    constructor(adapter: any) {
-        super(adapter, CounterDevice.name);
+    constructor(adapter: any, name: string) {
+        super(adapter, `counter-${name}`);
         this['@context'] = 'https://iot.mozilla.org/schemas/';
-        this.name = 'Counter';
+        this.name = name;
         let count: number = 0;
 
         const countProperty = this.createProperty('count', {
             type: 'integer',
-            title: 'Counter',
+            title: 'Count',
             readOnly: true
         });
 
@@ -70,9 +70,14 @@ export class CounterAdapter extends Adapter {
         addonManager.addAdapter(this);
 
         const {
+            timers
         } = manifest.moziot.config;
 
-        const counter = new CounterDevice(this);
-        this.handleDeviceAdded(counter);
+        if (timers) {
+            for (const timer of timers) {
+                const counter = new CounterDevice(this, timer.name);
+                this.handleDeviceAdded(counter);
+            }
+        }
     }
 }

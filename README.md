@@ -7,3 +7,7 @@
 [![license](https://img.shields.io/badge/license-MPL--2.0-blue.svg)](LICENSE)
 
 It count things.
+
+# How to use
+* Go the config of the adapter and add new timers
+* Go to the things view and add the new timers
