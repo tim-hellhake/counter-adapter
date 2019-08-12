@@ -45,6 +45,11 @@
               "name"
             ],
             "properties": {
+              "id": {
+                "type": "string",
+                "title": "The id of the timer (will be generated for you)",
+                "readOnly": true
+              },
               "name": {
                 "type": "string",
                 "title": "The name of the timer"

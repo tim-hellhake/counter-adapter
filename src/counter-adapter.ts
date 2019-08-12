@@ -4,7 +4,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.*
  */
 
-import { Adapter, Device, Property } from 'gateway-addon';
+import { Adapter, Device, Property, Database } from 'gateway-addon';
+
+import crypto from 'crypto';
 
 class CounterDevice extends Device {
     private callbacks: { [name: string]: () => void } = {};
@@ -65,20 +67,41 @@ class CounterDevice extends Device {
 }
 
 export class CounterAdapter extends Adapter {
+    private readonly database: Database;
     constructor(addonManager: any, manifest: any) {
         super(addonManager, CounterAdapter.name, manifest.name);
+        this.database = new Database(manifest.name)
         addonManager.addAdapter(this);
+        this.createTimers();
+    }
 
-        const {
-            timers
-        } = manifest.moziot.config;
+    private async createTimers() {
+        const timers = await this.loadTimers();
 
         if (timers) {
-            for (let index = 0; index < timers.length; index++) {
-                const timer = timers[index];
-                const counter = new CounterDevice(this, `counter-${index}`, timer.name);
+            for (const timer of timers) {
+                const counter = new CounterDevice(this, timer.id, timer.name);
                 this.handleDeviceAdded(counter);
             }
         }
+    }
+
+    private async loadTimers() {
+        await this.database.open();
+        const config = await this.database.loadConfig();
+        const {
+            timers
+        } = config;
+
+        if (timers) {
+            for (const timer of timers) {
+                if (!timer.id) {
+                    timer.id = crypto.randomBytes(16).toString("hex");
+                }
+            }
+        }
+
+        await this.database.saveConfig(config);
+        return timers;
     }
 }

@@ -29,4 +29,12 @@ declare module 'gateway-addon' {
 
         public handleDeviceAdded(device: Device): void;
     }
+
+    class Database {
+        constructor(packageName: string, path?: string);
+
+        public open(): Promise<void>;
+        public loadConfig(): Promise<any>;
+        public saveConfig(config: any): Promise<void>;
+    }
 }
