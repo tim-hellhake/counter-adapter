@@ -10,30 +10,70 @@ import crypto from 'crypto';
 
 class CounterDevice extends Device {
     private callbacks: { [name: string]: () => void } = {};
+    private count: number = 0;
+    private readonly countProperty: Property;
 
-    constructor(adapter: any, id: string, name: string) {
+    constructor(adapter: any, private id: string, name: string, private database: Database) {
         super(adapter, id);
         this['@context'] = 'https://iot.mozilla.org/schemas/';
         this.name = name;
-        let count: number = 0;
 
-        const countProperty = this.createProperty('count', {
+        this.countProperty = this.createProperty('count', {
             type: 'integer',
             title: 'Count',
             readOnly: true
         });
 
         this.addCallbackAction('reset', 'Reset the counter', () => {
-            count = 0;
-            countProperty.setCachedValue(count);
-            this.notifyPropertyChanged(countProperty);
+            this.saveCount(0);
         })
 
         this.addCallbackAction('increment', 'Increment the counter', () => {
-            count++;
-            countProperty.setCachedValue(count);
-            this.notifyPropertyChanged(countProperty);
+            this.saveCount(this.count + 1);
         })
+
+        this.loadCount();
+    }
+
+    async loadCount() {
+        await this.database.open();
+        const config = await this.database.loadConfig();
+        const {
+            timers
+        } = config;
+
+        if (timers) {
+            for (const timer of timers) {
+                if (timer.id == this.id && timer.count) {
+                    this.updateCount(timer.count);
+                }
+            }
+        }
+    }
+
+    async saveCount(newCount: number) {
+        await this.database.open();
+        const config = await this.database.loadConfig();
+        const {
+            timers
+        } = config;
+
+        if (timers) {
+            for (const timer of timers) {
+                if (timer.id == this.id) {
+                    timer.count = newCount;
+                }
+            }
+        }
+
+        await this.database.saveConfig(config);
+        this.updateCount(newCount);
+    }
+
+    updateCount(newCount: number) {
+        this.count = newCount;
+        this.countProperty.setCachedValue(newCount);
+        this.notifyPropertyChanged(this.countProperty);
     }
 
     createProperty(id: string, description: {}): Property {
@@ -68,6 +108,7 @@ class CounterDevice extends Device {
 
 export class CounterAdapter extends Adapter {
     private readonly database: Database;
+
     constructor(addonManager: any, manifest: any) {
         super(addonManager, CounterAdapter.name, manifest.name);
         this.database = new Database(manifest.name)
@@ -80,7 +121,7 @@ export class CounterAdapter extends Adapter {
 
         if (timers) {
             for (const timer of timers) {
-                const counter = new CounterDevice(this, timer.id, timer.name);
+                const counter = new CounterDevice(this, timer.id, timer.name, this.database);
                 this.handleDeviceAdded(counter);
             }
         }
