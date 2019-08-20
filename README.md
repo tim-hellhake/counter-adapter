@@ -9,8 +9,8 @@
 Let's you count things by calling the increment action.
 
 # How to use
-* Go the config of the adapter and add new timers
-* Go to the things view and add the new timers
+* Go the config of the adapter and add new counters
+* Go to the things view and add the new counters
 
 # Actions
 * reset()
