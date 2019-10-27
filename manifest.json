@@ -1,0 +1,48 @@
+{
+  "manifest_version": 1,
+  "id": "counter-adapter",
+  "name": "Counter",
+  "short_name": "Counter",
+  "version": "0.3.1",
+  "description": "Let's you count things by calling the increment action",
+  "homepage_url": "https://github.com/tim-hellhake/counter-adapter#readme",
+  "license": "MPL-2.0",
+  "author": "Tim Hellhake",
+  "gateway_specific_settings": {
+    "webthings": {
+      "exec": "{nodeLoader} {path}",
+      "strict_min_version": "0.10.0",
+      "strict_max_version": "*",
+      "primary_type": "adapter"
+    }
+  },
+  "options": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "timers": {
+          "type": "array",
+          "title": "A list of counters",
+          "items": {
+            "type": "object",
+            "title": "A counter",
+            "required": [
+              "name"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "title": "The id of the counter (will be generated for you)",
+                "readOnly": true
+              },
+              "name": {
+                "type": "string",
+                "title": "The name of the counter"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
