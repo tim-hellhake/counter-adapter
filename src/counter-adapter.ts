@@ -137,7 +137,7 @@ export class CounterAdapter extends Adapter {
         if (timers) {
             for (const timer of timers) {
                 if (!timer.id) {
-                    timer.id = crypto.randomBytes(16).toString("hex");
+                    timer.id = `counter-${crypto.randomBytes(16).toString("hex")}`;
                 }
             }
         }
