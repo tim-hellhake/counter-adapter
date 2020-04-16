@@ -24,11 +24,11 @@ class CounterDevice extends Device {
             readOnly: true
         });
 
-        this.addCallbackAction('reset', 'Reset the counter', () => {
+        this.addCallbackAction('reset', 'Reset', 'Reset the counter', () => {
             this.saveCount(0);
         })
 
-        this.addCallbackAction('increment', 'Increment the counter', () => {
+        this.addCallbackAction('increment', 'Increment', 'Increment the counter', () => {
             this.saveCount(this.count + 1);
         })
 
@@ -82,8 +82,8 @@ class CounterDevice extends Device {
         return property;
     }
 
-    addCallbackAction(title: string, description: string, callback: () => void) {
-        this.addAction(title, {
+    addCallbackAction(name: string, title: string, description: string, callback: () => void) {
+        this.addAction(name, {
             title,
             description
         });
