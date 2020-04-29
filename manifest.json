@@ -3,7 +3,7 @@
   "id": "counter-adapter",
   "name": "Counter",
   "short_name": "Counter",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "Let's you count things by calling the increment action",
   "homepage_url": "https://github.com/tim-hellhake/counter-adapter#readme",
   "license": "MPL-2.0",
