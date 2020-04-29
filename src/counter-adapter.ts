@@ -88,7 +88,7 @@ class CounterDevice extends Device {
             description
         });
 
-        this.callbacks[title] = callback;
+        this.callbacks[name] = callback;
     }
 
     async performAction(action: any) {
