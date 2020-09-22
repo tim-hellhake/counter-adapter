@@ -16,9 +16,11 @@ class CounterDevice extends Device {
     constructor(adapter: any, private id: string, name: string, private database: Database) {
         super(adapter, id);
         this['@context'] = 'https://iot.mozilla.org/schemas/';
+        this['@type'] = ['MultiLevelSensor'];
         this.name = name;
 
         this.countProperty = this.createProperty('count', {
+            '@type': 'LevelProperty',
             type: 'integer',
             title: 'Count',
             readOnly: true
